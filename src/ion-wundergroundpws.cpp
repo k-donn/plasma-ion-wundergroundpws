@@ -20,11 +20,10 @@
 #include "ion-wundergroundpws.h"
 
 #include <KUnitConversion/Converter>
-#include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonDocument>
 
-
-WundergroundPWSIon::WundergroundPWSIon(QObject *parent, const QVariantList &args)
+WundergroundPWSIon::WundergroundPWSIon(QObject* parent, const QVariantList& args)
     : IonInterface(parent, args)
 {
     setupNamingSchemeMap();
@@ -40,143 +39,143 @@ WundergroundPWSIon::~WundergroundPWSIon()
 void WundergroundPWSIon::setupNamingSchemeMap()
 {
     namingSchemeMap = QMap<QString, QString> {
-        { QStringLiteral("temp"), QStringLiteral("Temperature")},
-        { QStringLiteral("windChill"), QStringLiteral("Windchill")},
-        { QStringLiteral("heatIndex"), QStringLiteral("Humindex")},
+        { QStringLiteral("temp"), QStringLiteral("Temperature") },
+        { QStringLiteral("windChill"), QStringLiteral("Windchill") },
+        { QStringLiteral("heatIndex"), QStringLiteral("Humindex") },
 
-        { QStringLiteral("winddir"), QStringLiteral("Wind Directin")},
-        { QStringLiteral("windSpeed"), QStringLiteral("Wind Speed")},
-        { QStringLiteral("windGust"), QStringLiteral("Wind Gust")},
+        { QStringLiteral("winddir"), QStringLiteral("Wind Directin") },
+        { QStringLiteral("windSpeed"), QStringLiteral("Wind Speed") },
+        { QStringLiteral("windGust"), QStringLiteral("Wind Gust") },
 
-        { QStringLiteral("lat"),  QStringLiteral("Latitude")},
-        { QStringLiteral("lon"), QStringLiteral("Longitude")},
+        { QStringLiteral("lat"), QStringLiteral("Latitude") },
+        { QStringLiteral("lon"), QStringLiteral("Longitude") },
 
-        { QStringLiteral("country"), QStringLiteral("Country")},
-        { QStringLiteral("neighborhood"), QStringLiteral("Place")},
-        { QStringLiteral("stationID"), QStringLiteral("Station")},
+        { QStringLiteral("country"), QStringLiteral("Country") },
+        { QStringLiteral("neighborhood"), QStringLiteral("Place") },
+        { QStringLiteral("stationID"), QStringLiteral("Station") },
 
-        { QStringLiteral("realtimeFrequency"), QStringLiteral("Observation Frequency")},
-        { QStringLiteral("wxPhraseLong"), QStringLiteral("Current Conditions")},
-        { QStringLiteral("iconCode"), QStringLiteral("Condition Icon")},
-        { QStringLiteral("obsTimeLocal"), QStringLiteral("Observation Timestamp")},
+        { QStringLiteral("realtimeFrequency"), QStringLiteral("Observation Frequency") },
+        { QStringLiteral("wxPhraseLong"), QStringLiteral("Current Conditions") },
+        { QStringLiteral("iconCode"), QStringLiteral("Condition Icon") },
+        { QStringLiteral("obsTimeLocal"), QStringLiteral("Observation Timestamp") },
 
-        { QStringLiteral("humidity"), QStringLiteral("Humidity")},
-        { QStringLiteral("dewpt"), QStringLiteral("Dewpoint")},
-        { QStringLiteral("pressure"), QStringLiteral("Pressure")},
-        { QStringLiteral("pressureTendencyTrend"), QStringLiteral("Pressure Tendeny")},
-        { QStringLiteral("visibility"), QStringLiteral("Visibility")},
+        { QStringLiteral("humidity"), QStringLiteral("Humidity") },
+        { QStringLiteral("dewpt"), QStringLiteral("Dewpoint") },
+        { QStringLiteral("pressure"), QStringLiteral("Pressure") },
+        { QStringLiteral("pressureTendencyTrend"), QStringLiteral("Pressure Tendeny") },
+        { QStringLiteral("visibility"), QStringLiteral("Visibility") },
 
-        { QStringLiteral("uv"), QStringLiteral("UV Index")},
-        { QStringLiteral("uvDescription"), QStringLiteral("UV Rating")},
-        { QStringLiteral("solarRadiation"), QStringLiteral("Solar Intensity")},
+        { QStringLiteral("uv"), QStringLiteral("UV Index") },
+        { QStringLiteral("uvDescription"), QStringLiteral("UV Rating") },
+        { QStringLiteral("solarRadiation"), QStringLiteral("Solar Intensity") },
     };
 }
 
 QMap<QString, IonInterface::ConditionIcons> WundergroundPWSIon::setupDayIconMappings() const
 {
     return QMap<QString, IonInterface::ConditionIcons> {
-        {QStringLiteral("0"), Thunderstorm},
-        {QStringLiteral("1"), Thunderstorm},
-        {QStringLiteral("2"), Thunderstorm},
-        {QStringLiteral("3"), Showers},
-        {QStringLiteral("4"), Thunderstorm},
-        {QStringLiteral("5"), RainSnow},
-        {QStringLiteral("6"), FreezingRain},
-        {QStringLiteral("7"), FreezingDrizzle},
-        {QStringLiteral("8"), FreezingDrizzle},
-        {QStringLiteral("9"), LightRain},
-        {QStringLiteral("10"), FreezingRain},
-        {QStringLiteral("11"), Showers},
-        {QStringLiteral("12"), Rain},
-        {QStringLiteral("13"), Flurries},
-        {QStringLiteral("14"), LightSnow},
-        {QStringLiteral("15"), LightSnow},
-        {QStringLiteral("16"), Snow},
-        {QStringLiteral("17"), Hail},
-        {QStringLiteral("18"), FreezingDrizzle},
-        {QStringLiteral("19"), NotAvailable},
-        {QStringLiteral("20"), NotAvailable},
-        {QStringLiteral("21"), Haze},
-        {QStringLiteral("22"), NotAvailable},
-        {QStringLiteral("23"), ClearWindyDay},
-        {QStringLiteral("24"), ClearWindyDay},
-        {QStringLiteral("25"), NotAvailable},
-        {QStringLiteral("26"), FewCloudsDay},
-        {QStringLiteral("27"), PartlyCloudyNight},
-        {QStringLiteral("28"), PartlyCloudyDay},
-        {QStringLiteral("29"), PartlyCloudyNight},
-        {QStringLiteral("30"), PartlyCloudyDay},
-        {QStringLiteral("31"), ClearNight},
-        {QStringLiteral("32"), ClearDay},
-        {QStringLiteral("33"), FewCloudsNight},
-        {QStringLiteral("34"), FewCloudsDay},
-        {QStringLiteral("35"), Hail},
-        {QStringLiteral("36"), ClearDay},
-        {QStringLiteral("37"), Thunderstorm},
-        {QStringLiteral("38"), ChanceThunderstormDay},
-        {QStringLiteral("39"), ChanceShowersDay},
-        {QStringLiteral("40"), Rain},
-        {QStringLiteral("41"), ChanceSnowDay},
-        {QStringLiteral("42"), Snow},
-        {QStringLiteral("43"), Snow},
-        {QStringLiteral("44"), NotAvailable},
-        {QStringLiteral("45"), ChanceShowersNight},
-        {QStringLiteral("46"), ChanceSnowNight},
-        {QStringLiteral("47"), ChanceThunderstormNight},
+        { QStringLiteral("0"), Thunderstorm },
+        { QStringLiteral("1"), Thunderstorm },
+        { QStringLiteral("2"), Thunderstorm },
+        { QStringLiteral("3"), Showers },
+        { QStringLiteral("4"), Thunderstorm },
+        { QStringLiteral("5"), RainSnow },
+        { QStringLiteral("6"), FreezingRain },
+        { QStringLiteral("7"), FreezingDrizzle },
+        { QStringLiteral("8"), FreezingDrizzle },
+        { QStringLiteral("9"), LightRain },
+        { QStringLiteral("10"), FreezingRain },
+        { QStringLiteral("11"), Showers },
+        { QStringLiteral("12"), Rain },
+        { QStringLiteral("13"), Flurries },
+        { QStringLiteral("14"), LightSnow },
+        { QStringLiteral("15"), LightSnow },
+        { QStringLiteral("16"), Snow },
+        { QStringLiteral("17"), Hail },
+        { QStringLiteral("18"), FreezingDrizzle },
+        { QStringLiteral("19"), NotAvailable },
+        { QStringLiteral("20"), NotAvailable },
+        { QStringLiteral("21"), Haze },
+        { QStringLiteral("22"), NotAvailable },
+        { QStringLiteral("23"), ClearWindyDay },
+        { QStringLiteral("24"), ClearWindyDay },
+        { QStringLiteral("25"), NotAvailable },
+        { QStringLiteral("26"), FewCloudsDay },
+        { QStringLiteral("27"), PartlyCloudyNight },
+        { QStringLiteral("28"), PartlyCloudyDay },
+        { QStringLiteral("29"), PartlyCloudyNight },
+        { QStringLiteral("30"), PartlyCloudyDay },
+        { QStringLiteral("31"), ClearNight },
+        { QStringLiteral("32"), ClearDay },
+        { QStringLiteral("33"), FewCloudsNight },
+        { QStringLiteral("34"), FewCloudsDay },
+        { QStringLiteral("35"), Hail },
+        { QStringLiteral("36"), ClearDay },
+        { QStringLiteral("37"), Thunderstorm },
+        { QStringLiteral("38"), ChanceThunderstormDay },
+        { QStringLiteral("39"), ChanceShowersDay },
+        { QStringLiteral("40"), Rain },
+        { QStringLiteral("41"), ChanceSnowDay },
+        { QStringLiteral("42"), Snow },
+        { QStringLiteral("43"), Snow },
+        { QStringLiteral("44"), NotAvailable },
+        { QStringLiteral("45"), ChanceShowersNight },
+        { QStringLiteral("46"), ChanceSnowNight },
+        { QStringLiteral("47"), ChanceThunderstormNight },
     };
 }
 
 QMap<QString, IonInterface::ConditionIcons> WundergroundPWSIon::setupNightIconMappings() const
 {
     return QMap<QString, IonInterface::ConditionIcons> {
-        {QStringLiteral("0"), Thunderstorm},
-        {QStringLiteral("1"), Thunderstorm},
-        {QStringLiteral("2"), Thunderstorm},
-        {QStringLiteral("3"), Showers},
-        {QStringLiteral("4"), Thunderstorm},
-        {QStringLiteral("5"), RainSnow},
-        {QStringLiteral("6"), FreezingRain},
-        {QStringLiteral("7"), FreezingDrizzle},
-        {QStringLiteral("8"), FreezingDrizzle},
-        {QStringLiteral("9"), LightRain},
-        {QStringLiteral("10"), FreezingRain},
-        {QStringLiteral("11"), Showers},
-        {QStringLiteral("12"), Rain},
-        {QStringLiteral("13"), Flurries},
-        {QStringLiteral("14"), LightSnow},
-        {QStringLiteral("15"), LightSnow},
-        {QStringLiteral("16"), Snow},
-        {QStringLiteral("17"), Hail},
-        {QStringLiteral("18"), FreezingDrizzle},
-        {QStringLiteral("19"), NotAvailable},
-        {QStringLiteral("20"), NotAvailable},
-        {QStringLiteral("21"), Haze},
-        {QStringLiteral("22"), NotAvailable},
-        {QStringLiteral("23"), ClearWindyDay},
-        {QStringLiteral("24"), ClearWindyDay},
-        {QStringLiteral("25"), NotAvailable},
-        {QStringLiteral("26"), FewCloudsDay},
-        {QStringLiteral("27"), PartlyCloudyNight},
-        {QStringLiteral("28"), PartlyCloudyDay},
-        {QStringLiteral("29"), PartlyCloudyNight},
-        {QStringLiteral("30"), PartlyCloudyDay},
-        {QStringLiteral("31"), ClearNight},
-        {QStringLiteral("32"), ClearDay},
-        {QStringLiteral("33"), FewCloudsNight},
-        {QStringLiteral("34"), FewCloudsDay},
-        {QStringLiteral("35"), Hail},
-        {QStringLiteral("36"), ClearDay},
-        {QStringLiteral("37"), Thunderstorm},
-        {QStringLiteral("38"), ChanceThunderstormDay},
-        {QStringLiteral("39"), ChanceShowersDay},
-        {QStringLiteral("40"), Rain},
-        {QStringLiteral("41"), ChanceSnowDay},
-        {QStringLiteral("42"), Snow},
-        {QStringLiteral("43"), Snow},
-        {QStringLiteral("44"), NotAvailable},
-        {QStringLiteral("45"), ChanceShowersNight},
-        {QStringLiteral("46"), ChanceSnowNight},
-        {QStringLiteral("47"), ChanceThunderstormNight},
+        { QStringLiteral("0"), Thunderstorm },
+        { QStringLiteral("1"), Thunderstorm },
+        { QStringLiteral("2"), Thunderstorm },
+        { QStringLiteral("3"), Showers },
+        { QStringLiteral("4"), Thunderstorm },
+        { QStringLiteral("5"), RainSnow },
+        { QStringLiteral("6"), FreezingRain },
+        { QStringLiteral("7"), FreezingDrizzle },
+        { QStringLiteral("8"), FreezingDrizzle },
+        { QStringLiteral("9"), LightRain },
+        { QStringLiteral("10"), FreezingRain },
+        { QStringLiteral("11"), Showers },
+        { QStringLiteral("12"), Rain },
+        { QStringLiteral("13"), Flurries },
+        { QStringLiteral("14"), LightSnow },
+        { QStringLiteral("15"), LightSnow },
+        { QStringLiteral("16"), Snow },
+        { QStringLiteral("17"), Hail },
+        { QStringLiteral("18"), FreezingDrizzle },
+        { QStringLiteral("19"), NotAvailable },
+        { QStringLiteral("20"), NotAvailable },
+        { QStringLiteral("21"), Haze },
+        { QStringLiteral("22"), NotAvailable },
+        { QStringLiteral("23"), ClearWindyDay },
+        { QStringLiteral("24"), ClearWindyDay },
+        { QStringLiteral("25"), NotAvailable },
+        { QStringLiteral("26"), FewCloudsDay },
+        { QStringLiteral("27"), PartlyCloudyNight },
+        { QStringLiteral("28"), PartlyCloudyDay },
+        { QStringLiteral("29"), PartlyCloudyNight },
+        { QStringLiteral("30"), PartlyCloudyDay },
+        { QStringLiteral("31"), ClearNight },
+        { QStringLiteral("32"), ClearDay },
+        { QStringLiteral("33"), FewCloudsNight },
+        { QStringLiteral("34"), FewCloudsDay },
+        { QStringLiteral("35"), Hail },
+        { QStringLiteral("36"), ClearDay },
+        { QStringLiteral("37"), Thunderstorm },
+        { QStringLiteral("38"), ChanceThunderstormDay },
+        { QStringLiteral("39"), ChanceShowersDay },
+        { QStringLiteral("40"), Rain },
+        { QStringLiteral("41"), ChanceSnowDay },
+        { QStringLiteral("42"), Snow },
+        { QStringLiteral("43"), Snow },
+        { QStringLiteral("44"), NotAvailable },
+        { QStringLiteral("45"), ChanceShowersNight },
+        { QStringLiteral("46"), ChanceSnowNight },
+        { QStringLiteral("47"), ChanceThunderstormNight },
     };
 }
 
@@ -225,10 +224,9 @@ void WundergroundPWSIon::reset()
 }
 
 // purpose: fetch/use data from provider and trigger processing of returned data in a handler
-void WundergroundPWSIon::fetchValidStations(const QString &place, const QString &source)
+void WundergroundPWSIon::fetchValidStations(const QString& place, const QString& source)
 {
-    const QUrl url(QStringLiteral("https://api.weather.com/v3/location/search?query=") + place +
-                   QStringLiteral("&locationType=pws&language=en-US&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
+    const QUrl url(QStringLiteral("https://api.weather.com/v3/location/search?query=") + place + QStringLiteral("&locationType=pws&language=en-US&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
 
     KIO::TransferJob* getJob = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
     getJob->addMetaData(QStringLiteral("Accept-Encoding"), QStringLiteral("gzip"));
@@ -241,10 +239,9 @@ void WundergroundPWSIon::fetchValidStations(const QString &place, const QString 
 }
 
 // purpose: fetch data from provider and trigger processing of returned data in a handler
-void WundergroundPWSIon::fetchObservationData(const QString &stationId, const QString &source)
+void WundergroundPWSIon::fetchObservationData(const QString& stationId, const QString& source)
 {
-    const QUrl obsUrl(QStringLiteral("https://api.weather.com/v2/pws/observations/current?stationId=") + stationId +
-                      QStringLiteral("&units=m&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e&numericPrecision=decimal"));
+    const QUrl obsUrl(QStringLiteral("https://api.weather.com/v2/pws/observations/current?stationId=") + stationId + QStringLiteral("&units=m&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e&numericPrecision=decimal"));
 
     qDebug() << obsUrl;
 
@@ -262,8 +259,7 @@ void WundergroundPWSIon::fetchDemandData(const QString& latitude, const QString&
 {
     const QString geocode = QString(latitude + QStringLiteral(",") + longitude);
 
-    const QUrl demandUrl(QStringLiteral("https://api.weather.com/v3/wx/observations/current?geocode=") + geocode +
-                         QStringLiteral("9&units=m&language=en-US&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
+    const QUrl demandUrl(QStringLiteral("https://api.weather.com/v3/wx/observations/current?geocode=") + geocode + QStringLiteral("9&units=m&language=en-US&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
 
     qDebug() << demandUrl;
 
@@ -285,11 +281,9 @@ void WundergroundPWSIon::fetchDemandData(const QString& latitude, const QString&
 
 void WundergroundPWSIon::fetchForecastData(const QString& latitude, const QString& longitude, const QString& source)
 {
-    const QUrl forecastUrl(QStringLiteral("https://api.weather.com/v1/geocode/") + latitude + QStringLiteral("/") + longitude +
-                           QStringLiteral("/forecast/daily/7day.json?units=m&language=en-US&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
+    const QUrl forecastUrl(QStringLiteral("https://api.weather.com/v1/geocode/") + latitude + QStringLiteral("/") + longitude + QStringLiteral("/forecast/daily/7day.json?units=m&language=en-US&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
 
     qDebug() << forecastUrl;
-
 
     KIO::TransferJob* forecastJob = KIO::get(forecastUrl, KIO::Reload, KIO::HideProgressInfo);
     forecastJob->addMetaData(QStringLiteral("Accept-Encoding"), QStringLiteral("gzip"));
@@ -301,8 +295,7 @@ void WundergroundPWSIon::fetchForecastData(const QString& latitude, const QStrin
     connect(forecastJob, &KJob::result, this, &WundergroundPWSIon::forecast_slotJobFinished);
 }
 
-
-void WundergroundPWSIon::search_slotDataArrived(KIO::Job *job, const QByteArray &data)
+void WundergroundPWSIon::search_slotDataArrived(KIO::Job* job, const QByteArray& data)
 {
     if (data.isEmpty() || !m_jobJson.contains(job)) {
         return;
@@ -311,7 +304,7 @@ void WundergroundPWSIon::search_slotDataArrived(KIO::Job *job, const QByteArray 
     m_jobJson[job]->append(data);
 }
 
-void WundergroundPWSIon::search_slotJobFinished(KJob *job)
+void WundergroundPWSIon::search_slotJobFinished(KJob* job)
 {
     const QString source = m_jobList[job];
 
@@ -353,8 +346,7 @@ void WundergroundPWSIon::search_slotJobFinished(KJob *job)
     }
 }
 
-
-void WundergroundPWSIon::observation_slotDataArrived(KIO::Job *job, const QByteArray &data)
+void WundergroundPWSIon::observation_slotDataArrived(KIO::Job* job, const QByteArray& data)
 {
     if (data.isEmpty() || !m_jobJson.contains(job)) {
         return;
@@ -362,7 +354,7 @@ void WundergroundPWSIon::observation_slotDataArrived(KIO::Job *job, const QByteA
 
     m_jobJson[job]->append(data);
 }
-void WundergroundPWSIon::observation_slotJobFinished(KJob *job)
+void WundergroundPWSIon::observation_slotJobFinished(KJob* job)
 {
     const QString source = m_jobList[job];
 
@@ -427,8 +419,7 @@ void WundergroundPWSIon::observation_slotJobFinished(KJob *job)
     }
 }
 
-
-void WundergroundPWSIon::demand_slotDataArrived(KIO::Job *job, const QByteArray &data)
+void WundergroundPWSIon::demand_slotDataArrived(KIO::Job* job, const QByteArray& data)
 {
     if (data.isEmpty() || !m_jobJson.contains(job)) {
         return;
@@ -437,7 +428,7 @@ void WundergroundPWSIon::demand_slotDataArrived(KIO::Job *job, const QByteArray 
     m_jobJson[job]->append(data);
 }
 
-void WundergroundPWSIon::demand_slotJobFinished(KJob *job)
+void WundergroundPWSIon::demand_slotJobFinished(KJob* job)
 {
     const QString source = m_jobList[job];
 
@@ -495,8 +486,7 @@ void WundergroundPWSIon::demand_slotJobFinished(KJob *job)
     }
 }
 
-
-void WundergroundPWSIon::forecast_slotDataArrived(KIO::Job *job, const QByteArray &data)
+void WundergroundPWSIon::forecast_slotDataArrived(KIO::Job* job, const QByteArray& data)
 {
     if (data.isEmpty() || !m_jobJson.contains(job)) {
         return;
@@ -505,7 +495,7 @@ void WundergroundPWSIon::forecast_slotDataArrived(KIO::Job *job, const QByteArra
     m_jobJson[job]->append(data);
 }
 
-void WundergroundPWSIon::forecast_slotJobFinished(KJob *job)
+void WundergroundPWSIon::forecast_slotJobFinished(KJob* job)
 {
     const QString source = m_jobList[job];
 
@@ -569,7 +559,7 @@ void WundergroundPWSIon::forecast_slotJobFinished(KJob *job)
 }
 
 // purpose: process data from provider and turn into DataEngine data
-void WundergroundPWSIon::onValidateReport(const QStringList& placeList, const QString &source)
+void WundergroundPWSIon::onValidateReport(const QStringList& placeList, const QString& source)
 {
     const QStringList sourceAction = source.split(QLatin1Char('|'));
 
@@ -587,15 +577,12 @@ void WundergroundPWSIon::onValidateReport(const QStringList& placeList, const QS
     }
 }
 
-
 // purpose: process data from provider and turn into DataEngine data for the given source key
-void WundergroundPWSIon::onWeatherDataReport(const QString &source)
+void WundergroundPWSIon::onWeatherDataReport(const QString& source)
 {
     // finally set the created data for the given source key, so it will be pushed out to all consumers
     setData(source, weatherData);
 }
-
-
 
 K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(wundergroundpws, WundergroundPWSIon, "ion-wundergroundpws.json")
 

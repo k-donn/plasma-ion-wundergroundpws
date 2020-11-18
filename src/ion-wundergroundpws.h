@@ -20,15 +20,14 @@
 #ifndef IONWUNDERGROUNDPWS_H
 #define IONWUNDERGROUNDPWS_H
 
-#include <plasma/weather/ion.h>
 #include <KIO/Job>
+#include <plasma/weather/ion.h>
 
-class Q_DECL_EXPORT WundergroundPWSIon : public IonInterface
-{
+class Q_DECL_EXPORT WundergroundPWSIon : public IonInterface {
     Q_OBJECT
 
 public:
-    WundergroundPWSIon(QObject *parent, const QVariantList &args);
+    WundergroundPWSIon(QObject* parent, const QVariantList& args);
     ~WundergroundPWSIon();
 
 public: // IonInterface API
@@ -36,16 +35,16 @@ public: // IonInterface API
     void reset() override;
 
 private Q_SLOTS:
-    void search_slotDataArrived(KIO::Job *, const QByteArray &);
+    void search_slotDataArrived(KIO::Job*, const QByteArray&);
     void search_slotJobFinished(KJob* job);
 
-    void observation_slotDataArrived(KIO::Job *, const QByteArray &);
-    void observation_slotJobFinished(KJob *);
+    void observation_slotDataArrived(KIO::Job*, const QByteArray&);
+    void observation_slotJobFinished(KJob*);
 
-    void demand_slotDataArrived(KIO::Job *, const QByteArray &);
-    void demand_slotJobFinished(KJob *);
+    void demand_slotDataArrived(KIO::Job*, const QByteArray&);
+    void demand_slotJobFinished(KJob*);
 
-    void forecast_slotDataArrived(KIO::Job *, const QByteArray &);
+    void forecast_slotDataArrived(KIO::Job*, const QByteArray&);
     void forecast_slotJobFinished(KJob* job);
 
 private:
@@ -56,24 +55,23 @@ private:
     QMap<QString, IonInterface::ConditionIcons> const& dayIcons() const;
     QMap<QString, IonInterface::ConditionIcons> const& nightIcons() const;
 
-    void fetchValidStations(const QString &place, const QString &source);
-    void fetchObservationData(const QString &stationId, const QString &source);
-    void fetchLatLongBasedData(const QString &latitude, const QString &longitude, const QString &source);
-    void fetchDemandData(const QString &latitude, const QString &longitude, const QString &source);
-    void fetchForecastData(const QString &latitude, const QString &longitude, const QString &source);
+    void fetchValidStations(const QString& place, const QString& source);
+    void fetchObservationData(const QString& stationId, const QString& source);
+    void fetchLatLongBasedData(const QString& latitude, const QString& longitude, const QString& source);
+    void fetchDemandData(const QString& latitude, const QString& longitude, const QString& source);
+    void fetchForecastData(const QString& latitude, const QString& longitude, const QString& source);
 
-    void onValidateReport(const QStringList& placeList, const QString &source);
-    void onWeatherDataReport(const QString &source);
+    void onValidateReport(const QStringList& placeList, const QString& source);
+    void onWeatherDataReport(const QString& source);
 
 private:
     Plasma::DataEngine::Data weatherData;
 
     QMap<QString, QString> namingSchemeMap;
 
-    QHash<KJob *, QString> m_jobList;
-    QHash<KJob *, QByteArray *> m_jobJson;
-    QHash<KJob *, QStringList *> m_jobLatLong;
-
+    QHash<KJob*, QString> m_jobList;
+    QHash<KJob*, QByteArray*> m_jobJson;
+    QHash<KJob*, QStringList*> m_jobLatLong;
 };
 
 #endif
