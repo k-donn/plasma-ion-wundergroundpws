@@ -57,7 +57,6 @@ private:
 
     void fetchValidStations(const QString& place, const QString& source);
     void fetchObservationData(const QString& stationId, const QString& source);
-    void fetchLatLongBasedData(const QString& latitude, const QString& longitude, const QString& source);
     void fetchDemandData(const QString& latitude, const QString& longitude, const QString& source);
     void fetchForecastData(const QString& latitude, const QString& longitude, const QString& source);
 

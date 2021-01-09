@@ -211,6 +211,10 @@ bool WundergroundPWSIon::updateIonSource(const QString& source)
     }
 
     if (sourceAction.at(1) == QLatin1String("weather") && sourceAction.size() > 2) {
+        // calls:
+        // fetchObservationData ->
+        // fetchDemandData ->
+        // fetchForecastData
         fetchObservationData(sourceAction[2], source);
         return true;
     }
