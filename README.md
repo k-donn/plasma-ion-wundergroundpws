@@ -40,8 +40,7 @@ You then can test the ion itself by entering into the field for "Source name" e.
 `wundergroundpws|weather|foo`
 or
 `wundergroundpws|validate|foo`
-with "foo" being some location term which makes sense for your ion dataengine,
-and triggering the button "Request Source".
+with "foo" being the beginning of the name of a personal station. (ie. KGADACUL1)
 
 Or try to use it from the Plasma Addons Weather widget.
 Start the widget in a test window with
@@ -51,4 +50,6 @@ a weatherstation provided via your ion dataengine
 
 ## TODO
 
+-   [ ] Use i18?
+-   [ ] Add error handling in case station is down
 -   [ ] Refactor the key property map

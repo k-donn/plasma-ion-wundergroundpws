@@ -43,7 +43,7 @@ void WundergroundPWSIon::setupNamingSchemeMap()
         { QStringLiteral("windChill"), QStringLiteral("Windchill") },
         { QStringLiteral("heatIndex"), QStringLiteral("Humindex") },
 
-        { QStringLiteral("winddir"), QStringLiteral("Wind Directin") },
+        { QStringLiteral("winddir"), QStringLiteral("Wind Direction") },
         { QStringLiteral("windSpeed"), QStringLiteral("Wind Speed") },
         { QStringLiteral("windGust"), QStringLiteral("Wind Gust") },
 
@@ -532,11 +532,21 @@ void WundergroundPWSIon::forecast_slotJobFinished(KJob* job)
         for (int i = 1; i < forecasts.size(); ++i) {
             QJsonObject forecast = forecasts[i].toObject();
 
-            QJsonObject dayPart = forecast["day"].toObject();
+            bool hasDay = forecast.contains("day");
 
-            QString dayReport;
+            QJsonObject periodPart;
 
-            QString stringDate = dayPart["fcst_valid_local"].toString();
+            // After 3:00pm local time, the API stops sending forecast for the current day.
+            // Send the night forecast for the current day in case.
+            if (hasDay) {
+                periodPart = forecast["day"].toObject();
+            } else {
+                periodPart = forecast["night"].toObject();
+            }
+
+            QString periodReport;
+
+            QString stringDate = periodPart["fcst_valid_local"].toString();
 
             // Cut off timezone and time part (2020-11-05T07:00:00-0500)
             stringDate.chop(14);
@@ -545,17 +555,17 @@ void WundergroundPWSIon::forecast_slotJobFinished(KJob* job)
 
             monthDay.remove(QRegExp("^[0]*"));
 
-            dayReport.append(monthDay).append("|");
+            periodReport.append(monthDay).append("|");
 
-            dayReport.append(getWeatherIcon(dayIcons(), QString::number(dayPart["icon_code"].toInt()))).append("|");
+            periodReport.append(getWeatherIcon(dayIcons(), QString::number(periodPart["icon_code"].toInt()))).append("|");
 
-            dayReport.append(dayPart["shortcast"].toString()).append("|");
+            periodReport.append(periodPart["shortcast"].toString()).append("|");
 
-            dayReport.append(QString::number(forecast["max_temp"].toDouble())).append("|");
+            periodReport.append(QString::number(forecast["max_temp"].toDouble())).append("|");
 
-            dayReport.append(QString::number(forecast["min_temp"].toDouble())).append("|");
+            periodReport.append(QString::number(forecast["min_temp"].toDouble())).append("|");
 
-            weatherData.insert(QString("Short Forecast Day %1").arg(i - 1), dayReport);
+            weatherData.insert(QString("Short Forecast Day %1").arg(i - 1), periodReport);
         }
 
         onWeatherDataReport(source);
