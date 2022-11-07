@@ -230,7 +230,7 @@ void WundergroundPWSIon::reset()
 // purpose: fetch/use data from provider and trigger processing of returned data in a handler
 void WundergroundPWSIon::fetchValidStations(const QString& place, const QString& source)
 {
-    const QUrl url(QStringLiteral("https://api.weather.com/v3/location/search?query=") + place + QStringLiteral("&locationType=pws&language=en-US&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
+    const QUrl url(QStringLiteral("https://api.weather.com/v3/location/search?query=") + place + QStringLiteral("&locationType=pws&language=en-US&format=json&apiKey=e1f10a1e78da46f5b10a1e78da96f525"));
 
     KIO::TransferJob* getJob = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
     getJob->addMetaData(QStringLiteral("Accept-Encoding"), QStringLiteral("gzip"));
@@ -245,7 +245,7 @@ void WundergroundPWSIon::fetchValidStations(const QString& place, const QString&
 // purpose: fetch data from provider and trigger processing of returned data in a handler
 void WundergroundPWSIon::fetchObservationData(const QString& stationId, const QString& source)
 {
-    const QUrl obsUrl(QStringLiteral("https://api.weather.com/v2/pws/observations/current?stationId=") + stationId + QStringLiteral("&units=m&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e&numericPrecision=decimal"));
+    const QUrl obsUrl(QStringLiteral("https://api.weather.com/v2/pws/observations/current?stationId=") + stationId + QStringLiteral("&units=m&format=json&apiKey=e1f10a1e78da46f5b10a1e78da96f525&numericPrecision=decimal"));
 
     qDebug() << obsUrl;
 
@@ -263,7 +263,7 @@ void WundergroundPWSIon::fetchDemandData(const QString& latitude, const QString&
 {
     const QString geocode = QString(latitude + QStringLiteral(",") + longitude);
 
-    const QUrl demandUrl(QStringLiteral("https://api.weather.com/v3/wx/observations/current?geocode=") + geocode + QStringLiteral("9&units=m&language=en-US&format=json&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
+    const QUrl demandUrl(QStringLiteral("https://api.weather.com/v3/wx/observations/current?geocode=") + geocode + QStringLiteral("&units=m&language=en-US&format=json&apiKey=e1f10a1e78da46f5b10a1e78da96f525"));
 
     qDebug() << demandUrl;
 
@@ -285,7 +285,7 @@ void WundergroundPWSIon::fetchDemandData(const QString& latitude, const QString&
 
 void WundergroundPWSIon::fetchForecastData(const QString& latitude, const QString& longitude, const QString& source)
 {
-    const QUrl forecastUrl(QStringLiteral("https://api.weather.com/v1/geocode/") + latitude + QStringLiteral("/") + longitude + QStringLiteral("/forecast/daily/7day.json?units=m&language=en-US&apiKey=6532d6454b8aa370768e63d6ba5a832e"));
+    const QUrl forecastUrl(QStringLiteral("https://api.weather.com/v1/geocode/") + latitude + QStringLiteral("/") + longitude + QStringLiteral("/forecast/daily/7day.json?units=m&language=en-US&apiKey=e1f10a1e78da46f5b10a1e78da96f525"));
 
     qDebug() << forecastUrl;
 
